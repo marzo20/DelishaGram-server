@@ -33,7 +33,7 @@ app.get('/', myMiddleware, (req, res) => {
 })
 
 app.use('/api-v1/users', require('./controllers/api-v1/users'))
-
+app.use('/api-v1/posts', require('./controllers/api-v1/posts'))
 // listen on a port
 app.listen(PORT, () => {
 	console.log(`is the PORT ${PORT} that I hear? 🌽`)
