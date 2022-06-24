@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const DishSchema = new mongoose.Schema({
 	dishName: {
 		type: String,
-		required: true
 	},
 	Posts:[{
 		type: mongoose.Schema.Types.ObjectId,

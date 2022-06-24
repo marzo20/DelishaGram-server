@@ -7,16 +7,15 @@ const PostSchema = new mongoose.Schema({
 	// },
 	content: {
 		type: String,
-		required: true
 	},
 	rating: {
 		type: Number
 	},
-	Poster:{
+	poster:{
 		type: mongoose.Schema.Types.ObjectId,
         ref: "User"
 	},
-	Dish:{
+	dish:{
 		type: mongoose.Schema.Types.ObjectId,
         ref: "Dish"
 	},
