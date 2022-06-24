@@ -20,7 +20,15 @@ const UserSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: true
-	}
+	},
+	Created:[{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
+	}],
+	Favorites:[{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
+	}],
 }, {
 	timestamps: true
 })

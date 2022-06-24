@@ -10,8 +10,15 @@ const PostSchema = new mongoose.Schema({
 		required: true
 	},
 	rating: {
-		type: Number,
-		required: true
+		type: Number
+	},
+	Poster:{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+	},
+	Dish:{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Dish"
 	},
 	
 }, {
