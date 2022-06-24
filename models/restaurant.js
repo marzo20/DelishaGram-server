@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const RestaurantSchema = new mongoose.Schema({
     yelpRestaurantId: {
 		type: String,
-		required: true
 	},
     name: {
 		type: String,
