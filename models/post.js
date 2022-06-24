@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const UserSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema({
 	// imgURL: {
 	// 	type: String,
 	// 	required: true
