@@ -19,5 +19,6 @@ module.exports = {
 	// export db models
 	User: require('./user'),
 	Post: require('./post'),
-	Restaurant: require('./restaurant.js')
+	Restaurant: require('./restaurant.js'),
+	Dish: require('./dish.js'),
 }

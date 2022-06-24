@@ -6,7 +6,8 @@ const RestaurantSchema = new mongoose.Schema({
 		required: true
 	},
     name: {
-		type: String
+		type: String,
+		required: true
 	},
 	address1: {
 		type: String
@@ -34,7 +35,11 @@ const RestaurantSchema = new mongoose.Schema({
 	},
     longitude: {
 		type: Number
-	},
+	},	
+	Dishes:[{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Dish"
+	}],
 }, {
 	timestamps: true
 })
