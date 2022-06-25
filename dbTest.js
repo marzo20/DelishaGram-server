@@ -42,7 +42,10 @@ const testFunction = async () => {
 			dishName: 'mac and cheese pizza',
 
 		})
-
+			.then(dish => {
+				console.log('dish created!!!', dish)
+			})
+			.catch(console.warn)
 
 		console.log(createdUser)	
 		// test adding post to user 
