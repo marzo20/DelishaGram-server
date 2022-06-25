@@ -9,6 +9,8 @@ const app = express()
 const PORT =  process.env.PORT || 8000
 app.use(cors())
 app.use(express.json()) //json req.bodies
+// static upload folder for images
+app.use(express.static('uploads')) 
 
 // simple middleware
 // app.use((req, res, next) => {
@@ -34,6 +36,8 @@ app.get('/', myMiddleware, (req, res) => {
 
 app.use('/api-v1/users', require('./controllers/api-v1/users'))
 app.use('/api-v1/posts', require('./controllers/api-v1/posts'))
+app.use('/api-v1/images', require('./controllers/api-v1/images'))
+
 // listen on a port
 app.listen(PORT, () => {
 	console.log(`is the PORT ${PORT} that I hear? 🌽`)
