@@ -38,9 +38,9 @@ router.post('/', async (req, res) => {
         const newDish = await db.Dish.create({
             dishName: req.body.dish
         })
-        newDish.Posts.push(newPost)
+        newDish.posts.push(newPost)
         newDish.save()
-        newRestaurant.Dishes.push(newDish)
+        newRestaurant.dishes.push(newDish)
         newRestaurant.save()
         res.status(201).json(newPost, newRestaurant, newDish)
     }catch(err){
