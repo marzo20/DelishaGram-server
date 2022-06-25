@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const db =require('../../models')
+const jwt = require('jsonwebtoken')
 
 
 // GET /posts -- READ a all posts
@@ -28,56 +29,61 @@ router.get('/:id', async (req, res) => {
 // POST /posts -- create posts
 router.post('/', async (req, res) => {
     try {
+        // // jwt from the client sent in the headers
+        // const authHeader = req.headers.authorization
+        // console.log(req.headers.authorization)
+        // // decode the jwt -- will throw to the catch if the signature is invalid
+        // const decode = jwt.verify(authHeader, process.env.JWT_SECRET)
+        // // find the user in the db that sent the jwt
+        // const foundUser = await db.User.findById(decode.id)
+        // // mount the user on the res.locals, so the downstream route has the logged in user
+        // res.locals.user = foundUser
+        // console.log(foundUser)
         // FOR NOW, userId comes from req.body, FUTURE-> userId will come from token in localstorage
-        const foundUser = await db.User.findOne({
-            id: req.body.userId
-        })
+        // const currentUser = await db.User.findById(req.body)
 
         // create new post every time
-        const newPost = await db.Post.create({
-            content: req.body.content,
-            rating: req.body.rating
-        })
-        // find restaurant by name
-        let newRestaurant = await db.Restaurant.findOne({
-            name: req.body.restName
-        })
-        // if restaurant could not be found, create a new restaurant in db
-        if (!newRestaurant) {
-            newRestaurant = await db.Restaurant.create({
-                name: req.body.name  
-            })
-        }
-        // find dish by name
-        let newDish = await db.Dish.findOne({
-            dishName: req.body.dish
-        })
-        // if dish could not be found, create a new dish in db
-        if(!newDish) {
-            newDish = await db.Dish.create({
-                dishName: req.body.dish
-            })
-        }
+        const newPost = await db.Post.create(req.body)
+        // // find restaurant by name
+        // let newRestaurant = await db.Restaurant.findOne({
+        //     name: req.body.restName
+        // })
+        // // if restaurant could not be found, create a new restaurant in db
+        // if (!newRestaurant) {
+        //     newRestaurant = await db.Restaurant.create({
+        //         name: req.body.name  
+        //     })
+        // }
+        // // find dish by name
+        // let newDish = await db.Dish.findOne({
+        //     dishName: req.body.dish
+        // })
+        // // if dish could not be found, create a new dish in db
+        // if(!newDish) {
+        //     newDish = await db.Dish.create({
+        //         dishName: req.body.dish
+        //     })
+        // }
 
         // push new post into dish 
-        newDish.posts.push(newPost)
-        newDish.restaurant = newRestaurant
-        newDish.save()
+        // newDish.posts.push(newPost)
+        // newDish.restaurant = newRestaurant
+        // newDish.save()
 
-        // set dish reference in post 
-        newPost.dish = newDish
-        newPost.poster = foundUser
-        newPost.save()
+        // // set dish reference in post 
+        // newPost.dish = newDish
+        // newPost.poster = foundUser
+        // newPost.save()
 
         // push new post into created reference in user
-        foundUser.created.push(newPost)
-        foundUser.save()
+        // currentUser.created.push(newPost)
+        // currentUser.save()
 
         // push newdish into restaurant 
-        newRestaurant.dishes.push(newDish)
-        newRestaurant.save()
+        // newRestaurant.dishes.push(newDish)
+        // newRestaurant.save()
         
-        res.status(201).json(foundPost)
+        res.status(201).json(newPost)
     }catch(err){
         console.log('post error',err)
         if (err.name === "ValidationError"){
