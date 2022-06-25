@@ -36,7 +36,7 @@ const RestaurantSchema = new mongoose.Schema({
     longitude: {
 		type: Number
 	},	
-	Dishes:[{
+	dishes:[{
 		type: mongoose.Schema.Types.ObjectId,
         ref: "Dish"
 	}],

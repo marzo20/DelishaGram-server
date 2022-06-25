@@ -32,12 +32,22 @@ router.post('/', async (req, res) => {
             content: req.body.content,
             rating: req.body.rating
         })
-        const newRestaurant = await db.Restaurant.create({
+        let newRestaurant = await db.Restaurant.findOne({
             name: req.body.name
         })
+        if(!newRestaurant){
+            newRestaurant = await db.Restaurant.create({
+                name: req.body.name
+            })
+        }
         const newDish = await db.Dish.create({
             dishName: req.body.dish
         })
+        
+        newDish.posts.push(newPost)
+        newDish.save()
+        newRestaurant.dishes.push(newDish)
+        newRestaurant.save()
         res.status(201).json(newPost, newRestaurant, newDish)
     }catch(err){
         console.log('post error',err)
