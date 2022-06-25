@@ -4,11 +4,11 @@ const DishSchema = new mongoose.Schema({
 	dishName: {
 		type: String,
 	},
-	Posts:[{
+	posts:[{
 		type: mongoose.Schema.Types.ObjectId,
         ref: "Post"
 	}],
-	Restaurant:{
+	restaurant:{
 		type: mongoose.Schema.Types.ObjectId,
         ref: "Restaurant"
 	},
