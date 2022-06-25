@@ -28,21 +28,56 @@ router.get('/:id', async (req, res) => {
 // POST /posts -- create posts
 router.post('/', async (req, res) => {
     try {
+        // FOR NOW, userId comes from req.body, FUTURE-> userId will come from token in localstorage
+        const foundUser = await db.User.findOne({
+            id: req.body.userId
+        })
+
+        // create new post every time
         const newPost = await db.Post.create({
             content: req.body.content,
             rating: req.body.rating
         })
-        const newRestaurant = await db.Restaurant.create({
-            name: req.body.name
+        // find restaurant by name
+        let newRestaurant = await db.Restaurant.findOne({
+            name: req.body.restName
         })
-        const newDish = await db.Dish.create({
+        // if restaurant could not be found, create a new restaurant in db
+        if (!newRestaurant) {
+            newRestaurant = await db.Restaurant.create({
+                name: req.body.name  
+            })
+        }
+        // find dish by name
+        let newDish = await db.Dish.findOne({
             dishName: req.body.dish
         })
+        // if dish could not be found, create a new dish in db
+        if(!newDish) {
+            newDish = await db.Dish.create({
+                dishName: req.body.dish
+            })
+        }
+
+        // push new post into dish 
         newDish.posts.push(newPost)
+        newDish.restaurant = newRestaurant
         newDish.save()
+
+        // set dish reference in post 
+        newPost.dish = newDish
+        newPost.poster = foundUser
+        newPost.save()
+
+        // push new post into created reference in user
+        foundUser.created.push(newPost)
+        foundUser.save()
+
+        // push newdish into restaurant 
         newRestaurant.dishes.push(newDish)
         newRestaurant.save()
-        res.status(201).json(newPost, newRestaurant, newDish)
+        
+        res.status(201).json(foundPost)
     }catch(err){
         console.log('post error',err)
         if (err.name === "ValidationError"){
