@@ -25,7 +25,9 @@ router.post('/register', async (req, res) => {
 
 		// create a new user with the hashed password
 		const newUser = new db.User({
-			name: req.body.name,
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			userName: req.body.userName,
 			email: req.body.email,
 			password: hashedPassword
 		})
@@ -34,7 +36,9 @@ router.post('/register', async (req, res) => {
 		// sign the user in by sending a valid jwt back
 		// create the jwt payload
 		const payload = {
-			name: newUser.name,
+			firstName: newUser.firstName,
+			lastName: newUser.lastName,
+			userName: newUser.userName,
 			email: newUser.email,
 			id: newUser.id
 		}
@@ -79,7 +83,9 @@ router.post('/login', async (req, res) => {
 
 		// create a jwt payload
 		const payload = {
-			name: foundUser.name,
+			firstName: foundUser.firstName,
+			lastName: foundUser.lastName,
+			userName: foundUser.userName,
 			email: foundUser.email,
 			id: foundUser.id
 		}
