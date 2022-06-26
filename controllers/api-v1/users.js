@@ -101,18 +101,18 @@ router.post('/login', async (req, res) => {
 
 })
 
-router.get("/profile/:userId", async(req,res)=>{
+router.get("/profile/:id", async(req,res)=>{
 	try {
-		const foundUser = await db.User.findOne({
-			id: req.params.id
-		})
+		console.log(req.params.id)
+		const foundUser = await db.User.findById(req.params.id)
+		console.log("foundUser:",foundUser)
 		const sendUser = {
 			email: foundUser.email,
 			firstName: foundUser.firstName,
 			lastName: foundUser.lastName,
 			userName: foundUser.userName
 		}
-		console.log("foundUser:",sendUser)
+		// console.log("foundUser:",sendUser)
 		res.status(200).json(sendUser)
 	} catch (error) {
 		console.warn(error)
@@ -124,7 +124,7 @@ router.get("/profile/:userId", async(req,res)=>{
 router.put('/profile/:id', async (req, res) => {
     try {
         const userId = {
-			id: req.params.id
+			_id: req.params.id
 		}
 		// console.log(foundUser)
         // search for the id in the db, and update using the req.body
