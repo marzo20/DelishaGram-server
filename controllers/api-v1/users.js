@@ -101,6 +101,24 @@ router.post('/login', async (req, res) => {
 
 })
 
+// PUT /users/profile -- updates user's profile details
+router.put('/profile', async (req, res) => {
+    try {
+        const foundUser = await db.User.findOne({
+			email: req.body.email
+		})
+		console.log(foundUser)
+        // search for the id in the db, and update using the req.body
+        const options = { new: true } // return the updated bounty to us
+        const updatedProfile = await db.User.findOneAndUpdate(foundUser, req.body, options)
+        res.json(updatedProfile)
+    } catch (err) {
+        console.warn(err)
+        res.status(500).json({ msg: 'server error'})
+    }
+})
+
+
 // GET /users/auth-locked -- checks users credentials and only send back privlaged information if the user is logged in properly
 router.get('/auth-locked', authLockedRoute, (req, res) => {
 	console.log('current user is:', res.locals.user)
