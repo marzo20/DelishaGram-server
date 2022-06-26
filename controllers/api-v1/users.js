@@ -101,16 +101,36 @@ router.post('/login', async (req, res) => {
 
 })
 
-// PUT /users/profile -- updates user's profile details
-router.put('/profile', async (req, res) => {
-    try {
-        const foundUser = await db.User.findOne({
-			email: req.body.email
+router.get("/profile/:userId", async(req,res)=>{
+	try {
+		const foundUser = await db.User.findOne({
+			id: req.params.id
 		})
-		console.log(foundUser)
+		const sendUser = {
+			email: foundUser.email,
+			firstName: foundUser.firstName,
+			lastName: foundUser.lastName,
+			userName: foundUser.userName
+		}
+		console.log("foundUser:",sendUser)
+		res.status(200).json(sendUser)
+	} catch (error) {
+		console.warn(error)
+	}
+})
+
+
+// PUT /users/profile -- updates user's profile details
+router.put('/profile/:id', async (req, res) => {
+    try {
+        const userId = {
+			id: req.params.id
+		}
+		// console.log(foundUser)
         // search for the id in the db, and update using the req.body
         const options = { new: true } // return the updated bounty to us
-        const updatedProfile = await db.User.findOneAndUpdate(foundUser, req.body, options)
+        const updatedProfile = await db.User.findOneAndUpdate(userId, req.body, options)
+		console.log("updatedProfile: ",updatedProfile)
         res.json(updatedProfile)
     } catch (err) {
         console.warn(err)
