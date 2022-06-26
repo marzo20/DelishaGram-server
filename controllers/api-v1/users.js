@@ -125,4 +125,6 @@ router.get('/auth-locked', authLockedRoute, (req, res) => {
 	res.json({ msg: 'welcome to the secret auth-locked route 👋' })
 })
 
+
+
 module.exports = router
