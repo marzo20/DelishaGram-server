@@ -5,7 +5,6 @@ const PostSchema = new mongoose.Schema({
 	// 	type: String,
 	// 	required: true
 	// },
-	restaurant: String,
 	content: {
 		type: String,
 	},
@@ -16,7 +15,10 @@ const PostSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
         ref: "User"
 	},
-	dish: String
+	dish: {
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Dish"
+	}
 	
 }, {
 	timestamps: true
