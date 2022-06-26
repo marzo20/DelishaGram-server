@@ -8,8 +8,15 @@ const db = require('../../models')
 router.get('/', async (req, res) => {
     try {
         // find all posts
-        const posts = await db.Post.find({})
+        const posts = await db.Post.find({}).populate([{
+            path:"dish",
+            populate:{
+                path:"restaurant",
+            },
+        },{path:"poster"}])
         // send to the client
+        console.log(posts)
+
         res.json(posts)
     } catch (err) {
         res.status(500).json({ msg: 'server error' })
