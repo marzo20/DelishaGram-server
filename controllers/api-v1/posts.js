@@ -110,7 +110,7 @@ router.post('/', async (req, res) => {
 
 
         console.log("newPost:", newPost)
-        res.status(201).json({newPost})
+        res.status(201).json(newPost)
     } catch (err) {
         console.log('post error', err)
         if (err.name === "ValidationError") {
