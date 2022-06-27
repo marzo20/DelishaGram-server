@@ -26,7 +26,14 @@ router.get('/', async (req, res) => {
 // GET /posts/:id -- details on post
 router.get('/:id', async (req, res) => {
     try {
-        const post = await db.Post.findById(req.params.id)
+        const post = await db.Post.findById(req.params.id).populate([{
+            path:"dish",
+            populate:{
+                path:"restaurant"
+            }
+        },{
+            path:"poster"
+        }])
         res.json(post)
     } catch (err) {
         res.status(500).json({ msg: 'server error' })
