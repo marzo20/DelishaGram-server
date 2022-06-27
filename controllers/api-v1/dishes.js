@@ -9,7 +9,9 @@ const db = require('../../models')
 router.get('/search/:dishName', async (req, res) => {
     try {
         // find all posts
-        const foundDish = await db.Dish.find({dishName: req.params.dishName})
+        const foundDish = await db.Dish.find({dishName: req.params.dishName}).populate([{
+            path: "posts"
+        }, {path: 'restaurant'}])
         // send to the client
         res.json(foundDish)
     } catch (err) {
