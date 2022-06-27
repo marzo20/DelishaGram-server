@@ -6,10 +6,10 @@ const db = require('../../models')
 
 // GET /dishes -- take a search from user and show all dishes that match req.params
 
-router.get('/search/:dishname', async (req, res) => {
+router.get('/search/:dishName', async (req, res) => {
     try {
         // find all posts
-        const foundDish = await db.Dish.find(req.params.dishName)
+        const foundDish = await db.Dish.find({dishName: req.params.dishName})
         // send to the client
         res.json(foundDish)
     } catch (err) {
