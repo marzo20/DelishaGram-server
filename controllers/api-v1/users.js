@@ -104,13 +104,16 @@ router.post('/login', async (req, res) => {
 router.get("/profile/:id", async(req,res)=>{
 	try {
 		console.log(req.params.id)
-		const foundUser = await db.User.findById(req.params.id)
+		const foundUser = await db.User.findById(req.params.id).populate({
+			path:"created"
+		})
 		console.log("foundUser:",foundUser)
 		const sendUser = {
 			email: foundUser.email,
 			firstName: foundUser.firstName,
 			lastName: foundUser.lastName,
-			userName: foundUser.userName
+			userName: foundUser.userName,
+			posts: foundUser.created
 		}
 		// console.log("foundUser:",sendUser)
 		res.status(200).json(sendUser)
