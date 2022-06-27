@@ -17,8 +17,10 @@ router.get('/search/:dishName', async (req, res) => {
                 populate: {
                     path: "restaurant"
                 }
-            },
-            {path:"poster"}]
+            }, {
+                path: "poster",
+                select: "userName"
+            }]
         })
         console.log(foundDishes)
         // send to the client
