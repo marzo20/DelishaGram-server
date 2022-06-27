@@ -22,9 +22,17 @@ router.post('/', uploads.single('image'), async (req, res) => {
         if (!req.file) return res.status(400).json({ msg: 'no file uploaded' })
         // upload to cloudinary
         const cloudImageData = await cloudinary.uploader.upload(req.file.path)
-        console.log(cloudImageData.url) // jpg can be saved in the db
+        console.log(cloudImageData) // jpg can be saved in the db
+        
+       
         // png that can be manipulate -- save tot the db
        
+
+
+        const newImg = await db.Image.create({
+            cloud_id: cloudImageData.public_id
+       })
+       console.log(newImg)
         // const cloud_id = await db.Image.create({clougimageData.public_id})
         
         
@@ -34,7 +42,7 @@ router.post('/', uploads.single('image'), async (req, res) => {
         unlinkSync(req.file.path)
         // maybe we should save something in the db ??
         // send image back
-        res.json({ cloudImage })
+        res.json({ cloudImage, newImg })
 
     } catch (err) {
         console.warn(err)
