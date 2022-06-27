@@ -101,19 +101,19 @@ router.post('/login', async (req, res) => {
 
 })
 
-router.get("/profile/:id", async(req,res)=>{
+router.get("/profile/:id", async (req, res) => {
 	try {
 		console.log(req.params.id)
 		const foundUser = await db.User.findById(req.params.id).populate({
-			path:"created",
-			populate:{
-				path:"dish",
-				populate:{
-					path:"restaurant"
+			path: "created",
+			populate: {
+				path: "dish",
+				populate: {
+					path: "restaurant"
 				}
 			}
 		})
-		console.log("foundUser:",foundUser)
+		console.log("foundUser:", foundUser)
 		const sendUser = {
 			email: foundUser.email,
 			firstName: foundUser.firstName,
@@ -125,26 +125,51 @@ router.get("/profile/:id", async(req,res)=>{
 		res.status(200).json(sendUser)
 	} catch (error) {
 		console.warn(error)
+		res.status(500).json({ msg: 'server error' })
 	}
 })
 
 
 // PUT /users/profile -- updates user's profile details
 router.put('/profile/:id', async (req, res) => {
-    try {
-        const userId = {
+	try {
+		const userId = {
 			_id: req.params.id
 		}
 		// console.log(foundUser)
-        // search for the id in the db, and update using the req.body
-        const options = { new: true } // return the updated bounty to us
-        const updatedProfile = await db.User.findOneAndUpdate(userId, req.body, options)
-		console.log("updatedProfile: ",updatedProfile)
-        res.json(updatedProfile)
-    } catch (err) {
-        console.warn(err)
-        res.status(500).json({ msg: 'server error'})
-    }
+		// search for the id in the db, and update using the req.body
+		const options = { new: true } // return the updated bounty to us
+		const updatedProfile = await db.User.findOneAndUpdate(userId, req.body, options)
+		console.log("updatedProfile: ", updatedProfile)
+		res.status(200).json(updatedProfile)
+	} catch (err) {
+		console.warn(err)
+		res.status(500).json({ msg: 'server error' })
+	}
+})
+
+// PUT /users/changepassword -- updates user password
+router.put("/changepassword", async (req, res) => {
+	try {
+		const foundUser = await db.User.findById(req.body.userId)
+
+		// check if the supplied password matches the hash in the db
+		const passwordCheck = bcrypt.compare(req.body.currentPassword, foundUser.password)
+		// if they do not match, return and let the user know that login has failed
+		if (!passwordCheck) {
+			console.log('incorrect password', req.body.currentPassword)
+			return res.status(400).json({ msg: "Incorrect Current Password" })
+		} else {
+			const saltRounds = 12
+			const hashedPassword = await bcrypt.hash(req.body.newPassword, saltRounds)
+			foundUser.password = hashedPassword
+			await foundUser.save()
+			return res.status(200).json({ msg: "Password was updated" })
+		}
+	} catch (error) {
+		console.warn(error)
+		res.status(500).json({ msg: "Opps, something went wrong" })
+	}
 })
 
 
