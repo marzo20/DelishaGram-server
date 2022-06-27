@@ -6,14 +6,12 @@ const multer = require('multer')
 const cloudinary = require('cloudinary').v2
 //utility for deleting files
 const { unlinkSync } = require('fs')
+const db = require('../../models')
+
 
 // config for multer -- tell it about the static folder
 const uploads = multer({ dest: 'uploads/' }) // this is a middleware
 
-// GET /images -- READ all images (maybe for a user)
-router.get('/', (req, res) => {
-    res.send('get all images')
-})
 
 
 // // POST /images -- CREATE an image
@@ -26,6 +24,10 @@ router.post('/', uploads.single('image'), async (req, res) => {
         const cloudImageData = await cloudinary.uploader.upload(req.file.path)
         console.log(cloudImageData.url) // jpg can be saved in the db
         // png that can be manipulate -- save tot the db
+       
+        // const cloud_id = await db.Image.create({clougimageData.public_id})
+        
+        
         // cloudImageData.public_id -- save this to the db!
         const cloudImage = `http://res.cloudinary.com/dvgrz8ozc/image/upload/v1656115612/${cloudImageData.public_id}.png`
         // delete the file so it doesnt clutter up the server folder

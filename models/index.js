@@ -21,4 +21,5 @@ module.exports = {
 	Post: require('./post'),
 	Restaurant: require('./restaurant.js'),
 	Dish: require('./dish.js'),
+	Image: require('./image.js')
 }
