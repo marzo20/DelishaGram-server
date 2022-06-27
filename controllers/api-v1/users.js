@@ -105,7 +105,13 @@ router.get("/profile/:id", async(req,res)=>{
 	try {
 		console.log(req.params.id)
 		const foundUser = await db.User.findById(req.params.id).populate({
-			path:"created"
+			path:"created",
+			populate:{
+				path:"dish",
+				populate:{
+					path:"restaurant"
+				}
+			}
 		})
 		console.log("foundUser:",foundUser)
 		const sendUser = {
