@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 const PostSchema = new mongoose.Schema({
-	// imgURL: {
-	// 	type: String,
-	// 	required: true
-	// },
+	image:{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Image"
+	},
 	content: {
 		type: String,
 	},

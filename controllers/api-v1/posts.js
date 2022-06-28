@@ -90,6 +90,9 @@ router.post('/', async (req, res) => {
             })
         }
         console.log("newDish", newDish)
+        const newImg = await db.Image.create({
+            cloud_id: req.body.img
+        })
 
         // push new post into created reference in user
         foundUser.created.push(newPost)
@@ -103,7 +106,13 @@ router.post('/', async (req, res) => {
         // set dish reference in post 
         newPost.dish = newDish
         newPost.poster = foundUser
+        newPost.image = newImg
         await newPost.save()
+
+        // set new image into post
+        newImg.post = newPost
+        await newImg.save()
+
 
 
 
@@ -117,7 +126,7 @@ router.post('/', async (req, res) => {
 
 
         console.log("newPost:", newPost)
-        res.status(201).json(newPost)
+        res.status(201)
     } catch (err) {
         console.log('post error', err)
         if (err.name === "ValidationError") {

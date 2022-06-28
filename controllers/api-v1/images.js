@@ -29,10 +29,10 @@ router.post('/', uploads.single('image'), async (req, res) => {
        
 
 
-        const newImg = await db.Image.create({
-            cloud_id: cloudImageData.public_id
-       })
-       console.log(newImg)
+    //     const newImg = await db.Image.create({
+    //         cloud_id: cloudImageData.public_id
+    //    })
+    //    console.log(newImg)
         // const cloud_id = await db.Image.create({clougimageData.public_id})
         
         
@@ -42,7 +42,7 @@ router.post('/', uploads.single('image'), async (req, res) => {
         unlinkSync(req.file.path)
         // maybe we should save something in the db ??
         // send image back
-        res.json({ cloudImage, newImg })
+        res.json({ cloudImage })
 
     } catch (err) {
         console.warn(err)

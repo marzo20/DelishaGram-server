@@ -4,7 +4,7 @@ const ImageSchema = new mongoose.Schema({
     cloud_id: {
         type: String,
     },
-    posts: {
+    post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post"
     }
