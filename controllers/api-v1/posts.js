@@ -98,22 +98,22 @@ router.post('/', async (req, res) => {
 
         // push new post into created reference in user
         foundUser.created.push(newPost)
-        await foundUser.save()
+        foundUser.save()
 
         // push new post into dish 
         newDish.posts.push(newPost)
         newDish.restaurant = newRestaurant
-        await newDish.save()
+        newDish.save()
 
         // set dish reference in post 
         newPost.dish = newDish
         newPost.poster = foundUser
         newPost.image = newImg
-        await newPost.save()
+        newPost.save()
 
         // set new image into post
         newImg.post = newPost
-        await newImg.save()
+        newImg.save()
 
 
 
