@@ -9,11 +9,11 @@ router.get('/', async (req, res) => {
     try {
         // find all posts
         const posts = await db.Post.find({}).populate([{
-            path:"dish",
-            populate:{
-                path:"restaurant",
+            path: "dish",
+            populate: {
+                path: "restaurant",
             },
-        },{path:"poster"}])
+        }, { path: "poster" }])
         // send to the client
         console.log(posts)
 
@@ -27,12 +27,12 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const post = await db.Post.findById(req.params.id).populate([{
-            path:"dish",
-            populate:{
-                path:"restaurant"
+            path: "dish",
+            populate: {
+                path: "restaurant"
             }
-        },{
-            path:"poster"
+        }, {
+            path: "poster"
         }])
         res.json(post)
     } catch (err) {
@@ -142,14 +142,18 @@ router.put('/:id', async (req, res) => {
         const id = req.params.id
         // search for the id in the db. and update using the req.body
         const options = { new: true }
-        const updatedPost = await db.Post.findByIdAndUpdate(id, 
-            {rating: req.body.rating,
-            content: req.body.content
-            }, options).populate({
+        const updatedPost = await db.Post.findByIdAndUpdate(id,
+            {
+                rating: req.body.rating,
+                content: req.body.content
+            }, options).populate([{
                 path: "dish"
-            })
-        const updateDishName = await db.Dish.findByIdAndUpdate(updatedPost.dish, {dishName: req.body.dish}, options)
-        const updateRestaurant = await db.Restaurant.findByIdAndUpdate(updatedPost.dish.restaurant, {name: req.body.restaurant}, options)
+            }, {
+                path: "poster"
+            }
+            ])
+        const updateDishName = await db.Dish.findByIdAndUpdate(updatedPost.dish, { dishName: req.body.dish }, options)
+        const updateRestaurant = await db.Restaurant.findByIdAndUpdate(updatedPost.dish.restaurant, { name: req.body.restaurant }, options)
         // send the updated post to client
         console.log('UpdatedDishname:', updateDishName)
         res.json(updatedPost)
