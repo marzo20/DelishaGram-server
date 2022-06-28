@@ -106,12 +106,12 @@ router.get("/profile/:id", async (req, res) => {
 		console.log(req.params.id)
 		const foundUser = await db.User.findById(req.params.id).populate({
 			path: "created",
-			populate: {
+			populate: [{
 				path: "dish",
 				populate: {
 					path: "restaurant"
 				}
-			}
+			}, {path: "image"}]
 		})
 		console.log("foundUser:", foundUser)
 		const sendUser = {
@@ -119,7 +119,8 @@ router.get("/profile/:id", async (req, res) => {
 			firstName: foundUser.firstName,
 			lastName: foundUser.lastName,
 			userName: foundUser.userName,
-			posts: foundUser.created
+			posts: foundUser.created,
+			image: foundUser.created.image
 		}
 		// console.log("foundUser:",sendUser)
 		res.status(200).json(sendUser)
