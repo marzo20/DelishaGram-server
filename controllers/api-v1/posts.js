@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
             populate: {
                 path: "restaurant",
             },
-        }, { path: "poster" }])
+        }, { path: "poster"}])
         // send to the client
         console.log(posts)
 
@@ -33,6 +33,8 @@ router.get('/:id', async (req, res) => {
             }
         }, {
             path: "poster"
+        }, {
+            path: "image"
         }])
         res.json(post)
     } catch (err) {
