@@ -27,6 +27,11 @@ const myMiddleware = (req, res, next) => {
 	next()
 }
 
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	next();
+  });
+
 // routes and controllers
 // route specific middlware
 app.get('/', myMiddleware, (req, res) => {
@@ -38,6 +43,7 @@ app.use('/api-v1/users', require('./controllers/api-v1/users'))
 app.use('/api-v1/posts', require('./controllers/api-v1/posts'))
 app.use('/api-v1/images', require('./controllers/api-v1/images'))
 app.use('/api-v1/dishes', require('./controllers/api-v1/dishes'))
+app.use('/api-v1/restaurants', require('./controllers/api-v1/restaurants'))
 
 // listen on a port
 app.listen(PORT, () => {
