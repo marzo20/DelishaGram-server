@@ -20,6 +20,8 @@ router.get('/search/:dishName', async (req, res) => {
                 }, {
                     path: "poster",
                     select: "userName"
+                }, {
+                    path: "image"
                 }]
             })
 
