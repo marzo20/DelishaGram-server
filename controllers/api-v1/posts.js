@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const db = require('../../models')
 // const jwt = require('jsonwebtoken')
+const axios = require("axios")
 
 
 // GET /posts -- READ a all posts
@@ -12,6 +13,7 @@ router.get('/', async (req, res) => {
             path: "dish",
             populate: {
                 path: "restaurant",
+                select:"name",
             },
         }, { path: "poster" , select: "userName"}, {path: "image"}])
         // send to the client
@@ -56,6 +58,15 @@ router.post('/', async (req, res) => {
         // res.locals.user = foundUser
         // console.log(foundUser)
 
+        // hit yelp API for restaurant information
+        const header = {
+            headers: {
+                "Authorization": `Bearer ${process.env.YELP_API_KEY}`,
+            }
+        }
+        const yelpBusiness = await axios.get(`https://api.yelp.com/v3/businesses/${req.body.restaurantId}`, header)
+        console.log(yelpBusiness)
+
         // Find Current User by email via req.body
         const foundUser = await db.User.findOne({
             email: req.body.email
@@ -64,7 +75,6 @@ router.post('/', async (req, res) => {
 
         // create new post every time
         const newPost = await db.Post.create({
-            restaurant: req.body.restaurant,
             content: req.body.content,
             rating: req.body.rating
         })
@@ -72,12 +82,23 @@ router.post('/', async (req, res) => {
         console.log("req.body:", req.body)
         // find restaurant by name
         let newRestaurant = await db.Restaurant.findOne({
-            name: req.body.restaurant
+            yelpRestaurantId: req.body.restaurantId
         })
         // if restaurant could not be found, create a new restaurant in db
         if (!newRestaurant) {
             newRestaurant = await db.Restaurant.create({
-                name: req.body.restaurant
+                yelpRestaurantId: yelpBusiness.data.id,
+                name: yelpBusiness.data.name,
+                address1: yelpBusiness.data.location.address1,
+                address2: yelpBusiness.data.location.address2,
+                address3: yelpBusiness.data.location.address3,
+                city: yelpBusiness.data.location.city,
+                zip_code: yelpBusiness.data.location.zip_code,
+                country: yelpBusiness.data.location.country,
+                state: yelpBusiness.data.location.state,
+                latitude: yelpBusiness.data.coordinates.latitude,
+                longitude: yelpBusiness.data.coordinates.longitude,
+                image_url:yelpBusiness.data.image_url
             })
         }
         console.log("newRestaurant", newRestaurant)
