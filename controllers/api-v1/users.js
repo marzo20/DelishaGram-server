@@ -101,6 +101,24 @@ router.post('/login', async (req, res) => {
 
 })
 
+// get users based on search term for username
+router.get("/search/:searchUser", async (req,res)=>{
+	try {
+		const allUsers = await db.User.find({}, "userName")
+		const filteredUsers = allUsers.filter((user)=>{
+			return user.userName.toLowerCase().includes(req.params.searchUser.toLowerCase())
+		})
+		if (filteredUsers.length > 0) {
+			res.status(200).json(filteredUsers)
+		} else {
+			res.status(204).json(filteredUsers)
+		}
+		console.log(filteredUsers)
+	} catch (error) {
+		console.warn(error)
+	}
+})
+
 //get user profile details
 router.get("/profile/:id", async (req, res) => {
 	try {

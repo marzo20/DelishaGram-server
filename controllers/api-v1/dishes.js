@@ -38,4 +38,28 @@ router.get('/search/:dishName', async (req, res) => {
     }
 })
 
+// get all posts for a dish
+router.get("/:id", async (req,res)=>{
+    try {
+        // get all posts associated with a dish id from req.params
+        const foundDish = await db.Dish.findById(req.params.id)
+        // populate
+        const populatedDish = await foundDish.populate([{
+            path:"posts"
+        },{
+            path:"restaurant", select:"name"
+        }])
+        console.log(populatedDish)
+
+        // return response
+        res.status(200).json({msg:"OK"})
+    } catch (error) {
+        console.warn(error)
+    }
+})
+
+// get all posts for a dish and restaurant
+
+
+
 module.exports = router
