@@ -101,6 +101,24 @@ router.post('/login', async (req, res) => {
 
 })
 
+// get users based on search term for username
+router.get("/search/:searchUser", async (req,res)=>{
+	try {
+		const allUsers = await db.User.find({}, "userName")
+		const filteredUsers = allUsers.filter((user)=>{
+			return user.userName.toLowerCase().includes(req.params.searchUser.toLowerCase())
+		})
+		if (filteredUsers.length > 0) {
+			res.status(200).json(filteredUsers)
+		} else {
+			res.status(204).json(filteredUsers)
+		}
+		console.log(filteredUsers)
+	} catch (error) {
+		console.warn(error)
+	}
+})
+
 //get user profile details
 router.get("/profile/:id", async (req, res) => {
 	try {
@@ -113,7 +131,7 @@ router.get("/profile/:id", async (req, res) => {
 					path: "restaurant"
 				}
 			}, { path: "image" }]
-		}, {path:"following", select:"userName"}, {path:"following", select:"userName"}])
+		}, { path: "following", select: "userName" }, { path: "following", select: "userName" }])
 		console.log("foundUser:", foundUser)
 		const sendUser = {
 			email: foundUser.email,
@@ -183,33 +201,6 @@ router.get('/auth-locked', authLockedRoute, (req, res) => {
 	res.json({ msg: 'welcome to the secret auth-locked route 👋' })
 })
 
-router.get("/following/:userId", async (req,res) =>{
-	try {
-		const foundUser = db.User.findById(req.params.userId)
-		.populate({
-			path:"following",
-			select:"userName"
-		})
-		console.log(foundUser)
-		res.status(200).json({msg:"meep"})
-	} catch (error) {
-		console.warn(error)
-	}
-})
-
-router.get("/followers/:userId", async (req,res) =>{
-	try {
-		const foundUser = db.User.findById(req.params.userId)
-		.populate({
-			path:"followers",
-			select:"userName"
-		})
-		res.status(200).json(foundUser)
-	} catch (error) {
-		console.warn(error)
-	}
-})
-
 router.post("/follow", async (req, res) => {
 	try {
 		// get currentUserId and userToFollowId from req.body
@@ -226,15 +217,32 @@ router.post("/follow", async (req, res) => {
 		foundCurrentUser.following.push(foundUserToFollow)
 		await foundCurrentUser.save()
 
-		res.status(200).json({msg: "success!"})
+		res.status(200).json({ msg: "success!" })
 	} catch (error) {
 		console.warn(error)
 	}
 })
 
+// route to unfollow user
 router.delete("/unfollow", async (req, res) => {
 	try {
+		// get currentUserId and userToUnfollowId from req.body
+		console.log(req.body)
+		// find both users
+		const foundCurrentUser = await db.User.findById(req.body.currentUserId)
+		const foundUserToUnfollow = await db.User.findById(req.body.userToUnfollowId)
 
+		// find user within pop user from arrays
+		const unfollowersIdx = foundUserToUnfollow.followers.indexOf(foundCurrentUser.id)
+		// console.log(unfollowersId)
+		foundUserToUnfollow.followers.splice(unfollowersIdx,1)
+		await foundUserToUnfollow.save()
+
+		const unfollowingIdx = foundCurrentUser.following.indexOf(foundUserToUnfollow.id)
+		foundCurrentUser.following.splice(unfollowingIdx,1)
+		await foundCurrentUser.save()
+
+		res.status(200).json({ msg: "success!" })
 	} catch (error) {
 		console.warn(error)
 	}
