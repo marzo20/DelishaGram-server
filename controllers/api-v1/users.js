@@ -121,10 +121,12 @@ router.get("/search/:searchUser", async (req,res)=>{
 })
 
 //get user profile details
-router.get("/profile/:id", async (req, res) => {
+router.get("/profile/:userName", async (req, res) => {
 	try {
-		console.log(req.params.id)
-		const foundUser = await db.User.findById(req.params.id).populate([{
+		console.log("req.params:",req.params)
+		const foundUser = await db.User.findOne({
+			userName: req.params.userName
+		}).populate([{
 			path: "created",
 			populate: [{
 				path: "dish",
