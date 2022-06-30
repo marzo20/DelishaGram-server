@@ -183,33 +183,6 @@ router.get('/auth-locked', authLockedRoute, (req, res) => {
 	res.json({ msg: 'welcome to the secret auth-locked route 👋' })
 })
 
-router.get("/following/:userId", async (req, res) => {
-	try {
-		const foundUser = db.User.findById(req.params.userId)
-			.populate({
-				path: "following",
-				select: "userName"
-			})
-		console.log(foundUser)
-		res.status(200).json({ msg: "meep" })
-	} catch (error) {
-		console.warn(error)
-	}
-})
-
-router.get("/followers/:userId", async (req, res) => {
-	try {
-		const foundUser = db.User.findById(req.params.userId)
-			.populate({
-				path: "followers",
-				select: "userName"
-			})
-		res.status(200).json(foundUser)
-	} catch (error) {
-		console.warn(error)
-	}
-})
-
 router.post("/follow", async (req, res) => {
 	try {
 		// get currentUserId and userToFollowId from req.body
