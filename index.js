@@ -44,6 +44,7 @@ app.use('/api-v1/posts', require('./controllers/api-v1/posts'))
 app.use('/api-v1/images', require('./controllers/api-v1/images'))
 app.use('/api-v1/dishes', require('./controllers/api-v1/dishes'))
 app.use('/api-v1/restaurants', require('./controllers/api-v1/restaurants'))
+app.use('/api-v1/comments', require('./controllers/api-v1/comments'))
 
 // listen on a port
 app.listen(PORT, () => {

@@ -18,7 +18,11 @@ const PostSchema = new mongoose.Schema({
 	dish: {
 		type: mongoose.Schema.Types.ObjectId,
         ref: "Dish"
-	}
+	},
+	comments: [{
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
+	}],
 	
 }, {
 	timestamps: true
