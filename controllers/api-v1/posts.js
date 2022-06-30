@@ -137,8 +137,6 @@ router.post('/', async (req, res) => {
         newImg.save()
 
 
-
-
         // push newdish into restaurant 
         const dishAlreadyInRest = newRestaurant.dishes.includes(newDish._id)
         console.log("dishAlreadyInRest T/F", dishAlreadyInRest)
@@ -146,7 +144,6 @@ router.post('/', async (req, res) => {
             newRestaurant.dishes.push(newDish)
             await newRestaurant.save()
         }
-
 
         console.log("newPost:", newPost)
         res.sendStatus(201)
