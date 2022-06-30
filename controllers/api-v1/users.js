@@ -137,6 +137,7 @@ router.get("/profile/:userName", async (req, res) => {
 		}, { path: "following", select: "userName" }, { path: "following", select: "userName" }])
 		console.log("foundUser:", foundUser)
 		const sendUser = {
+			id: foundUser.id,
 			email: foundUser.email,
 			firstName: foundUser.firstName,
 			lastName: foundUser.lastName,
@@ -146,7 +147,7 @@ router.get("/profile/:userName", async (req, res) => {
 			following: foundUser.following,
 			followers: foundUser.followers
 		}
-		// console.log("foundUser:",sendUser)
+		console.log("foundUser:",sendUser)
 		res.status(200).json(sendUser)
 	} catch (error) {
 		console.warn(error)
