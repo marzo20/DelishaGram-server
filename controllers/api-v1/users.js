@@ -9,7 +9,8 @@ router.post('/register', async (req, res) => {
 	try {
 		// check if the user exists already
 		const findUser = await db.User.findOne({
-			email: req.body.email
+			email: req.body.email,
+			userName: req.body.userName
 		})
 
 		// disallow users from registering twice
