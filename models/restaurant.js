@@ -34,6 +34,9 @@ const RestaurantSchema = new mongoose.Schema({
 	},
     longitude: {
 		type: Number
+	},
+	image_url: {
+		type: String
 	},	
 	dishes:[{
 		type: mongoose.Schema.Types.ObjectId,
