@@ -221,24 +221,26 @@ router.post("/follow", async (req, res) => {
 		foundCurrentUser.following.push(foundUserToFollow)
 		await foundCurrentUser.save()
 
-		res.status(200).json({ msg: "success!" })
+		res.sendStatus(200)
 	} catch (error) {
 		console.warn(error)
 	}
 })
 
 // route to unfollow user
-router.delete("/unfollow", async (req, res) => {
+router.put("/unfollow", async (req, res) => {
 	try {
 		// get currentUserId and userToUnfollowId from req.body
 		console.log(req.body)
 		// find both users
 		const foundCurrentUser = await db.User.findById(req.body.currentUserId)
-		const foundUserToUnfollow = await db.User.findById(req.body.userToUnfollowId)
+		console.log("Current Uuser ARR",foundCurrentUser)
 
+		const foundUserToUnfollow = await db.User.findById(req.body.userToUnfollowId)
+		
+		console.log("unfollowUser follow ARR",foundUserToUnfollow)
 		// find user within pop user from arrays
 		const unfollowersIdx = foundUserToUnfollow.followers.indexOf(foundCurrentUser.id)
-		// console.log(unfollowersId)
 		foundUserToUnfollow.followers.splice(unfollowersIdx,1)
 		await foundUserToUnfollow.save()
 
@@ -246,7 +248,7 @@ router.delete("/unfollow", async (req, res) => {
 		foundCurrentUser.following.splice(unfollowingIdx,1)
 		await foundCurrentUser.save()
 
-		res.status(200).json({ msg: "success!" })
+		res.sendStatus(200)
 	} catch (error) {
 		console.warn(error)
 	}
