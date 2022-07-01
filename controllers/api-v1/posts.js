@@ -15,7 +15,13 @@ router.get('/', async (req, res) => {
                 path: "restaurant",
                 select:"name",
             },
-        }, { path: "poster" , select: "userName"}, {path: "image"}])
+        }, { path: "poster" , select: "userName"}, {path: "image"}, {
+            path:"comments",
+            populate: {
+                path:"commenter",
+                select:"userName"
+            }
+        }])
         // send to the client
         console.log(posts)
 
